@@ -1,0 +1,27 @@
+Package: tempaural
+Title: TODO
+Date: 2020-06-08
+Version: 0.0.1
+Authors@R: c(
+    person("Quentin", "Geissmann", role = c("aut", "cre"), email = "qgeissmann@gmail.com"),
+    person("Mary", "Westwood", role = c("cre"), email = "Mary.Westwood@ed.ac.uk")
+    )
+Description: Some description goes here TODO
+Depends:  
+    R (>= 3.00),
+    behavr,
+    data.table
+    seewave
+Suggests: 
+    testthat,
+    covr,
+    knitr
+Remotes:
+    rethomics/tempaural
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/rethomics/tempaural
+BugReports: https://github.com/rethomics/tempaural/issues
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)

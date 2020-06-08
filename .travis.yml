@@ -1,0 +1,31 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: false
+cache: packages
+latex: true
+dist: trusty 
+
+r_packages: desc
+
+env:
+    global:
+        - MAKEFLAGS="-j 2"
+ 
+matrix:
+  include:
+    - r: oldrel
+    - r: release
+      env: R_RELEASE=true  
+    - r: devel
+      env: R_DEVEL=true
+script:
+    - set -e
+    - bash .travis_check.sh
+    - bash .travis_deploy.sh 
+after_success:
+    - bash .travis_after_success.sh     
+notifications:
+    email:
+        on_success: change
+        on_failure: change
