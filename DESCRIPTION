@@ -1,5 +1,5 @@
 Package: tempaural
-Title: TODO
+Title: TODO todo
 Date: 2020-06-08
 Version: 0.0.1
 Authors@R: c(
@@ -11,7 +11,11 @@ Depends:
     R (>= 3.00),
     behavr,
     data.table,
-    seewave
+    seewave,
+    tuneR,
+    hms,
+    stringr,
+    digest
 Suggests: 
     testthat,
     covr,
@@ -23,5 +27,5 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/rethomics/tempaural
 BugReports: https://github.com/rethomics/tempaural/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

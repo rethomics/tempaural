@@ -1,4 +1,4 @@
 library(testthat)
-library(damr)
+library(tempaural)
 
-test_check("damr")
+test_check("tempaural")
