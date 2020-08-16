@@ -23,7 +23,7 @@ map_mp3_chunks(
 
 \item{show_progress}{logical, whether to display progress}
 
-\item{cache_dir}{an optional directory, where the chunk is indefinitely stored (see details)}
+\item{cache_dir}{an optional directory, where the chunk is indefinitely stored}
 
 \item{ffmpeg_quiet}{logical, whether to hide the verbose output from ffmpeg}
 
