@@ -7,8 +7,7 @@
 #' @export
 #' @examples
 #' # list all files
-#' scopr_example()
-
+#' tempaural_example()
 tempaural_example <- function(path = NULL) {
   if (is.null(path)) {
     dir(system.file("extdata", package = "tempaural"))
@@ -18,7 +17,7 @@ tempaural_example <- function(path = NULL) {
 }
 
 
-#' @rdname scopr_example
+#' @rdname tempaural_example
 #' @export
 tempaural_example_dir <- function() {
   system.file("extdata",package = "tempaural")

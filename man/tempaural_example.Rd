@@ -2,9 +2,12 @@
 % Please edit documentation in R/examples.R
 \name{tempaural_example}
 \alias{tempaural_example}
+\alias{tempaural_example_dir}
 \title{Get path to tempaural example}
 \usage{
 tempaural_example(path = NULL)
+
+tempaural_example_dir()
 }
 \arguments{
 \item{path}{Name of file. If \code{NULL}, the example files will be listed.}
@@ -15,5 +18,5 @@ directory. \code{tempaural} allow  make them easy to access.
 }
 \examples{
 # list all files
-scopr_example()
+tempaural_example()
 }

@@ -1,5 +1,5 @@
 Package: tempaural
-Title: TODO todo
+Title: TODO another todo for toing the todo
 Date: 2020-06-08
 Version: 0.0.1
 Authors@R: c(
@@ -8,13 +8,17 @@ Authors@R: c(
     )
 Description: Some description goes here TODO
 Depends: 
-    R (>= 3.00),
+    R (>= 3.00)
+Imports:
     behavr,
     data.table,
     seewave,
     tuneR,
     hms,
     stringr,
+    lubridate,
+    memoise,
+    readr,
     digest
 Suggests: 
     testthat,
