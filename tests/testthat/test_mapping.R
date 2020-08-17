@@ -20,7 +20,7 @@ context("mapping")
 test_that("map_chunk_dir works", {
   set.seed(1)
   exple_dir = tempaural::tempaural_example_dir()
-  metadata = data.table::data.table(id=c('ID1','ID2'),
+  metadata = data.frame(id=c('ID1','ID2'),
                        start_datetime = c('2020-08-09 12:09:00','2020-08-09 17:08:00'),
                        end_datetime = c('2020-08-09 17:15:00', '2020-08-09 17:15:00'),
                        genotype=c('addesaf','fewsfr'))
@@ -41,8 +41,13 @@ test_that("map_chunk_dir works", {
   dt1 <- tempaural::map_dir_chunks(metadata, exple_dir, FUN=my_function, 
                                   chunk_duration = 60, cache=d)
   # should be a LOT FASTER
+
+  list.files(d,recursive = T)
+  print(d)
   dt2 <- tempaural::map_dir_chunks(metadata, exple_dir, FUN=my_function, 
                                    chunk_duration = 60, cache=d)
+  # print(dt2)
+  testthat::expect_equal(dt1, dt2)
   
   my_other_function <- function(wave){
     out <- list(
@@ -51,12 +56,18 @@ test_that("map_chunk_dir works", {
     
     out
   }
-  dt3 <- tempaural::map_dir_chunks(metadata, exple_dir, FUN=my_function, 
+  dt3 <- tempaural::map_dir_chunks(metadata, exple_dir, FUN=my_other_function, 
                                    chunk_duration = 60, cache=d)
   
   # changing the function recomputed means not using the cache. whould get different results
   testthat::expect_true(sum(abs(dt1$my_var - dt3$my_var)) >0 )
-})
+
+ dt4 <- tempaural::map_dir_chunks(metadata, exple_dir, FUN=my_function, 
+                                   chunk_duration = 60, cache=d, verbose = TRUE)
+ 
+ testthat::expect_true(sum(abs(dt1$my_var - dt4$my_var)) >0 )
+ 
+ })
 
 
 test_that("fetch_scope_files_for_id works", {

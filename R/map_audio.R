@@ -88,15 +88,15 @@ map_dir_chunks <- function(metadata, root_dir,
   metadata[, end_datetime := NULL]
   data.table::setnames(metadata, c('start_datetime_posix_','end_datetime_posix_'),
                      c('start_datetime',       'end_datetime'))
-  metadata[, subdir_for_id := file.path(root_dir,id)]
+  metadata[, subdir_for_id_ := file.path(root_dir,id)]
 
-  missing_dirs = metadata[!dir.exists(metadata[,subdir_for_id])]
+  missing_dirs = metadata[!dir.exists(metadata[,subdir_for_id_])]
   if(nrow(missing_dirs))
     stop(sprintf("Some directories do not exist/match id, in metadata: %s", past(missing_dirs[,id])))
   
 
   all_chunks_dt <- metadata[,
-          fetch_scope_files_for_id(subdir_for_id,as.POSIXct(start_datetime), 
+          fetch_scope_files_for_id(subdir_for_id_,as.POSIXct(start_datetime), 
                                  as.POSIXct(end_datetime), 
                                  chunk_duration, 
                                  tz),
@@ -108,6 +108,7 @@ map_dir_chunks <- function(metadata, root_dir,
                   by=list(id,chunk_id, chunk_start_datetime )]
   data.table::setkey(fun_results,id)
   data.table::setkey(metadata,id)
+  metadata[,subdir_for_id_ := NULL]
   dt <- behavr::behavr(fun_results,metadata)
   dt[, chunk_id := NULL]
   dt[, t:=as.numeric(chunk_start_datetime - xmv(start_datetime), unit='secs') ]
@@ -118,9 +119,11 @@ map_dir_chunks <- function(metadata, root_dir,
 
 wrap_mapper <- function(FUN, cache){
   mapper <- function(FUN, path, start, chunk_duration, verbose, ...) {
-    out <- FUN(extract_audio_chunk(path, start, chunk_duration, !verbose), ...)
+    out <- FUN(extract_audio_chunk(path, start, chunk_duration, quiet = TRUE), ...)
     if(verbose)
-      message(sprintf("%s: %f. Result: ",path, start/duration, paste(out)))
+      message(sprintf("%s @%.02fs. Result: %s",path, round(start,2),
+                      paste(names(out),out,sep="=",collapse="; " )
+                      ))
     out
     } 
   
