@@ -92,7 +92,7 @@ map_dir_chunks <- function(metadata, root_dir,
 
   missing_dirs = metadata[!dir.exists(metadata[,subdir_for_id_])]
   if(nrow(missing_dirs))
-    stop(sprintf("Some directories do not exist/match id, in metadata: %s", past(missing_dirs[,id])))
+    stop(sprintf("Some directories do not exist/match id, in metadata: %s", paste(missing_dirs[,id])))
   
 
   all_chunks_dt <- metadata[,
