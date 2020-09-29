@@ -10,8 +10,7 @@ file_duration <- function(path){
   path = normalizePath(path)
   if(!file.exists(path))
     stop(paste('So such file', path))
-  command = sprintf("ffprobe  '%s' 2>&1", path)
-  out <- system(command, intern=TRUE)
+  out <- system2("ffprobe", args=path ,stdout=TRUE, stderr=TRUE)
   duration_line = grep('Duration:',out,value = T)
   re = '\\d+:\\d+:\\d+\\.\\d+'
   str_duration = stringr::str_match(duration_line,re)
@@ -36,10 +35,15 @@ extract_audio_chunk <- function(path, start, duration, quiet=TRUE){
   ext = sprintf(".%s", tools::file_ext(path))
   tmp_mp3 = tempfile(pattern = 'tempaural_', fileext = ext)
   on.exit(try(unlink(tmp_mp3)))
-  command = sprintf("ffmpeg -ss %i -t %i -i '%s' -c:a copy '%s'", start, duration, path, tmp_mp3)
+  args = c(paste0("-ss ", start),
+          paste0("-t ", duration),
+          paste0("-i ", path),
+          "-c:a copy",
+          tmp_mp3
+          )
   if(quiet)
-    command = paste(command, '-hide_banner -loglevel panic')
-  system(command,wait = TRUE)
+    args = c(args, '-hide_banner', "-loglevel panic")
+  system2('ffmpeg', args = args, stdout = TRUE, wait = TRUE)
   
   out <- tuneR::readMP3(tmp_mp3)
   out
