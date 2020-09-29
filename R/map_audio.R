@@ -151,7 +151,10 @@ fetch_scope_files_for_id <- function(dir, start_datetime, end_datetime, chunk_du
   all_files_dt = all_files_dt[order(file_start_datetime)]
   #3 check ranges are roughly contiguous (no gaps, no redundancies)! Error/warn otherwise
   
-  if(!all_files_dt[, all(abs(as.numeric(file_start_datetime[2:.N] - file_end_datetime[1:.N-1],unit='secs')) < chunk_duration * 5)])
+  if(!all_files_dt[, all(abs(
+          as.numeric(file_start_datetime[2:.N] - file_end_datetime[1:.N-1],unit='secs')
+        )< chunk_duration )
+        ])
     stop(sprintf('Files in dir %s are not contiguous',dir))
   
   
