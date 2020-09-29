@@ -102,9 +102,18 @@ map_dir_chunks <- function(metadata, root_dir,
                                  tz),
           by='id']
   all_chunks_dt[, chunk_id :=1:.N]
+  
   wrapped_mapper <- wrap_mapper(FUN, cache = cache)
+  
+  if(verbose)
+    wrapped_mapper <- function(FUN, path, t_in_file, chunk_duration , ...){
+      out <- wrap_mapper(FUN, cache = cache)(FUN, path, t_in_file, chunk_duration, ...)
+      message(sprintf("%s @%.02fs. Result: %s",path, round(t_in_file,2), paste(names(out),out,sep="=",collapse="; " )))
+      out
+      }
+    
   fun_results = all_chunks_dt[, 
-                      wrapped_mapper(FUN, path, t_in_file, chunk_duration, verbose),
+                      wrapped_mapper(FUN, path, t_in_file, chunk_duration),
                   by=list(id,chunk_id, chunk_start_datetime )]
   data.table::setkey(fun_results,id)
   data.table::setkey(metadata,id)
@@ -118,12 +127,8 @@ map_dir_chunks <- function(metadata, root_dir,
 
 
 wrap_mapper <- function(FUN, cache){
-  mapper <- function(FUN, path, start, chunk_duration, verbose, ...) {
+  mapper <- function(FUN, path, start, chunk_duration, ...) {
     out <- FUN(extract_audio_chunk(path, start, chunk_duration, quiet = TRUE), ...)
-    if(verbose)
-      message(sprintf("%s @%.02fs. Result: %s",path, round(start,2),
-                      paste(names(out),out,sep="=",collapse="; " )
-                      ))
     out
     } 
   
@@ -196,26 +201,3 @@ parse_start_datetime_from_file <- function(filename, tz='UTC'){
   datetime
   }
 
-# 
-# 
-# map_mp3_chunks <- function(path,
-#                            FUN,
-#                            chunk_duration, 
-#                            show_progress=FALSE,
-#                            cache=NULL,
-#                            ffmpeg_quiet=TRUE, 
-#                            ...){
-#   ID =  start = .N  = NULL
-#   duration <- mp3_file_duration(path)
-#   
-#   mapper <- function(start) {
-#     if(show_progress)
-#       message(sprintf("%s: %f",path,start/duration))
-#     FUN(mp3_extract_chunk(path, start, chunk_duration,cache_dir, ffmpeg_quiet), ...)
-#     
-#   }  
-#   out <- data.table::data.table(start=seq(from=0, to=duration, by=chunk_duration))
-#   out[, ID:=1:.N]
-#   out[, mapper(start), by=ID]
-#   
-# }
